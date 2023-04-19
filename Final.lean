@@ -1,12 +1,12 @@
 
+namespace Day1
 
 def path : System.FilePath := System.mkFilePath ["/Users/ellismclarty/Documents/2022-23/Spring 2023/SCHC411/final/elf_input.txt"]
 #eval IO.FS.readFile path
 
 #eval path
 
-def main : IO Unit :=
-    let s := IO.FS.readFile
+
 
 
 def test: String :=
@@ -39,8 +39,8 @@ def calories (s: String) : List Nat :=
 
 #eval (elves test).map calories
 
-def addUp (l : list Nat) : Nat := 
-    l.foldl (\. + \.) 0 
+def addUp (l : List Nat) : Nat := 
+    l.foldl (. + .) 0 
 
 #eval addUp [1, 2, 3, 4, 5]
 #eval (elves test).map calories
@@ -72,3 +72,23 @@ def contents : IO Unit := do
 #print Option
 
 #eval contents
+
+
+
+end Day1
+
+namespace Day2
+
+inductive Play where
+    |Rock
+    |Paper
+    |Scissors
+
+deriving Repr
+open Play
+def Play.Name : Play → String
+    |Rock => "Rock"
+    |Paper => "Paper"
+    |Scissors => "Scissors"
+
+#eval Play.Name Rock
