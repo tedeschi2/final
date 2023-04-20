@@ -86,9 +86,43 @@ inductive Play where
 
 deriving Repr
 open Play
+
 def Play.Name : Play → String
     |Rock => "Rock"
     |Paper => "Paper"
     |Scissors => "Scissors"
 
 #eval Play.Name Rock
+
+def value (play : Play) : Nat :=
+  match play with 
+  | .Rock => 1
+  | .Paper => 2
+  | .Scissors => 3
+   
+def score (opp you : Play) : Nat :=
+    match opp, you with 
+    | .Rock, .Rock => 4
+    | .Rock, .Paper => 8
+    | .Rock, .Scissors => 3
+    | .Paper, .Rock => 1
+    | .Paper, .Paper => 5
+    | .Paper, .Scissors => 9
+    | .Scissors, .Rock => 7
+    | .Scissors, .Paper => 2
+    | .Scissors, .Scissors => 6   
+
+def PlayxPlay (s : String) : (Play × Play) := 
+    match s with 
+    |"A X" => (Rock, Rock) 
+    |"A Y" => (Rock, Paper)
+    |"A Z" => (Rock, Scissors)
+    |"B X" => (Paper, Rock)
+    |"B Y" => (Paper, Paper)
+    |"B Z" => (Paper, Scissors)
+    |"C X" => (Scissors, Rock)
+    |"C Y" => (Scissors, Paper)
+    |"C Z" => (Scissors, Scissors)
+    | _ => (Rock, Rock)
+
+input, split file
