@@ -1,10 +1,10 @@
 
 namespace Day1
 
-def path : System.FilePath := System.mkFilePath ["/Users/ellismclarty/Documents/2022-23/Spring 2023/SCHC411/final/elf_input.txt"]
-#eval IO.FS.readFile path
+--def path : System.FilePath := System.mkFilePath ["/Users/ellismclarty/Documents/2022-23/Spring 2023/SCHC411/final/elf_input.txt"]
+--#eval IO.FS.readFile path
 
-#eval path
+--#eval path
 
 
 
@@ -51,6 +51,7 @@ def totalCallist (s : String) : List Nat :=
     l'.map addUp
 
 #eval totalCallist test
+
 def answer (s: String) : Nat := 
     totalCallist s|>.foldl max 0
 
@@ -58,12 +59,12 @@ def answer (s: String) : Nat :=
 
 #check IO.FS.readFile
 
-#print System.FilePath
+#print System.FilePath 
 
-def path System.FilePath.mk "/Users/ellismclarty/Documents/2022-23/Spring_2023/SCHC411/elf_input.txt"
+def path := System.FilePath.mk "/Users/ellismclarty/Documents/2022-23/Spring_2023/SCHC411/elf_input.txt"
 
 def contents : IO Unit := do
-    let file \<- IO.FileSystem.readFile path
+    let file ← IO.FS.readFile path
     IO.println file
     let newFile := String.join ["hi", file]
     IO.println newFile
@@ -71,58 +72,88 @@ def contents : IO Unit := do
 
 #print Option
 
-#eval contents
-
 
 
 end Day1
 
+
+
 namespace Day2
 
 inductive Play where
-    |Rock
-    |Paper
-    |Scissors
-
+    | Rock
+    | Paper
+    | Scissors
 deriving Repr
+
 open Play
 
-def Play.Name : Play → String
-    |Rock => "Rock"
-    |Paper => "Paper"
-    |Scissors => "Scissors"
+def Play.name : Play → String
+    | Rock => "Rock"
+    | Paper => "Paper"
+    | Scissors => "Scissors"
 
-#eval Play.Name Rock
+#eval Play.name Rock
 
 def value (play : Play) : Nat :=
-  match play with 
-  | .Rock => 1
-  | .Paper => 2
-  | .Scissors => 3
-   
+    match play with
+        | Rock => 1
+        | Paper => 2
+        | Scissors => 3
+
+
+def testGame : String :=
+    "A Y
+B X
+C Z"
+
+#eval testGame
+
+def round (s : String) : List String := s.splitOn "\n"
+
+#eval round testGame
+
 def score (opp you : Play) : Nat :=
-    match opp, you with 
+    match opp, you with
     | .Rock, .Rock => 4
-    | .Rock, .Paper => 8
-    | .Rock, .Scissors => 3
-    | .Paper, .Rock => 1
-    | .Paper, .Paper => 5
-    | .Paper, .Scissors => 9
-    | .Scissors, .Rock => 7
-    | .Scissors, .Paper => 2
-    | .Scissors, .Scissors => 6   
+    | .Rock, .Paper => 8
+    | .Rock, .Scissors => 3
+    | .Paper, .Rock => 1
+    | .Paper, .Paper => 5
+    | .Paper, .Scissors => 9
+    | .Scissors, .Rock => 7
+    | .Scissors, .Paper => 2
+    | .Scissors, .Scissors => 6
 
-def PlayxPlay (s : String) : (Play × Play) := 
+
+def playxPlay : String → (Play × Play) := by
+    intro s
     match s with 
-    |"A X" => (Rock, Rock) 
-    |"A Y" => (Rock, Paper)
-    |"A Z" => (Rock, Scissors)
-    |"B X" => (Paper, Rock)
-    |"B Y" => (Paper, Paper)
-    |"B Z" => (Paper, Scissors)
-    |"C X" => (Scissors, Rock)
-    |"C Y" => (Scissors, Paper)
-    |"C Z" => (Scissors, Scissors)
-    | _ => (Rock, Rock)
+    |"A X" => exact (.Rock, .Rock)
+    |"A Y" => exact (.Rock, .Paper)
+    |"A Z" => exact (.Rock, .Scissors)
+    |"B X" => exact (.Paper, .Rock)
+    |"B Y" => exact (.Paper, .Paper)
+    |"B Z" => exact (.Paper, .Scissors)
+    |"C X" => exact (.Scissors, .Rock)
+    |"C Y" => exact (.Scissors, .Paper)
+    |"C Z" => exact (Scissors, .Scissors)
+    | _ => exact (.Rock, .Rock)
 
-input, split file
+
+#eval (round testGame).map playxPlay
+
+#eval (((round testGame).map playxPlay).map fun x => score x.1 x.2).foldl (·+·) 0
+
+def path := System.FilePath.mk "/Users/ellismclarty/Desktop/input2.txt"
+
+def contents : IO Unit := do
+    let file ← IO.FS.readFile path
+    IO.println file
+    let newFile := String.join ["hi", file]
+    IO.println newFile
+    return ()
+
+#print Option
+#eval contents
+
