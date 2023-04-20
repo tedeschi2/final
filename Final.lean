@@ -156,4 +156,5 @@ def contents : IO Unit := do
 
 #print Option
 #eval contents
-
+#check IO.FS.readFile
+#print System.FilePath 
